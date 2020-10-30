@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option go_package = "tempconvert/contract";
+
+package contract;
+
+message TempConvertRequest { double fahrenheit = 1; }
+message TempConvertReply { double celsius = 1; }
