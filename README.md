@@ -118,6 +118,7 @@ The code you would have at the end of following this guide is available in this 
             WriteTimeout: 10 * time.Second,
             IdleTimeout:  1 * time.Minute,
         }
+        log.Print("Listening")
         log.Fatal(s.ListenAndServe())
     }
     ```
@@ -182,7 +183,6 @@ At this point it is time to write the actual logic of our API and having tests w
     # === RUN   TestHelloOk
     # --- PASS: TestHelloOk (0.00s)
     # PASS
-    # coverage: 66.7% of statements
     # ...
     ```
 
@@ -228,20 +228,20 @@ We are having to write a lot of commands in the terminal so a tool like `make` c
 
     `Makefile`
     ```makefile
-        protoc:
-            rm -f contract/*.pb.go
-            protoc contract/contract.proto --go_out=contract
-            mv contract/tempconvert/contract/* contract
-            rm -rf contract/tempconvert
-        .PHONY: protoc
+    protoc:
+        rm -f contract/*.pb.go
+        protoc contract/contract.proto --go_out=contract
+        mv contract/tempconvert/contract/* contract
+        rm -rf contract/tempconvert
+    .PHONY: protoc
 
-        test:
-            go test -v -coverprofile=cover.out ./...
-        .PHONY: test
+    test:
+        go test -v -coverprofile=cover.out ./...
+    .PHONY: test
 
-        run:
-            go run main.go
-        .PHONY: run
+    run:
+        go run main.go
+    .PHONY: run
     ```
 2.  Try running each of the commands:
     ```sh
@@ -305,7 +305,6 @@ We are having to write a lot of commands in the terminal so a tool like `make` c
     # === RUN   TestConvertOk
     # --- PASS: TestConvertOk (0.00s)
     # PASS
-    # coverage: 75.0% of statements
     # ...
     ```
 4.  If we change the test values it will fail because we hardcoded the response to be "0"
@@ -342,7 +341,6 @@ We are having to write a lot of commands in the terminal so a tool like `make` c
     # === RUN   TestConvertOk
     # --- PASS: TestConvertOk (0.00s)
     # PASS
-    # coverage: 68.4% of statements
     # ...
     ```
 8.  Try it out
@@ -475,21 +473,23 @@ Other useful information
 1.  `cmd/ctrl+shift+p`
 2.  Type "preferences"
 3.  Select `Preferences: Open Settings (JSON)`
-4.  Copy and paste the below & save
-        "go.coverOnSave": true,
-        "go.coverageDecorator": {
-            "type": "gutter",
-            "coveredHighlightColor": "rgba(64,128,128,0.5)",
-            "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
-            "coveredGutterStyle": "blockgreen",
-            "uncoveredGutterStyle": "blockred"
-        },
-        "go.coverOnSingleTest": true,
+4.  Copy and paste the below at the top after the opening `{` & save
+    ```
+    "go.coverOnSave": true,
+    "go.coverageDecorator": {
+        "type": "gutter",
+        "coveredHighlightColor": "rgba(64,128,128,0.5)",
+        "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+        "coveredGutterStyle": "blockgreen",
+        "uncoveredGutterStyle": "blockred"
+    },
+    "go.coverOnSingleTest": true,
+    ```
 5.  Resave `main.go` and it should show red & green gutters to the left of line the line numbers for each uncovered & covered line
 
 ## Maintenance
 Updating this README's Table of Contents:
-1.  Save it as `README.md`  
+1.  Save it as `README.md`
 2.  Install and run `remark` using `remark-toc`
     ```sh
     npm i -g remark
